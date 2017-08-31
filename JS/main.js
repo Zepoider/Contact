@@ -47,7 +47,7 @@ document.getElementById('add-contact').onclick = function (event){
         RemoveMail(target);
     }
 }
-//Заливаем базу при первом запуске/релоаде
+//Подтягивание базы контактов при первом запуске/релоаде
     if (localStorage.getItem('Contacts'))
     {
         ContactsArray = JSON.parse(localStorage.getItem('Contacts'));
@@ -198,7 +198,7 @@ function ReloadContactList(currentArray) {
         }
     }
 }
-//Рисуем форму добавления и редактирования контакта
+//Отрисовка формы добавления и редактирования контакта
 function AddContactDrow() {
 
     let contactForm = document.getElementById('add-contact');
@@ -376,7 +376,7 @@ function AddMail() {
     ResetAddContactWindow();
     OpenContactWindow(Contact);
 }
-//Рисуеем список контактов
+//Отрисовка списка контактов
 function ContactListDraw(contact) {
 
     let contactList = document.getElementById('contact-list');
