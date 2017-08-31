@@ -67,6 +67,7 @@ function AddNewContact() {
 }
 function RemoveContact() {
     ContactsArray.splice(Contact.id, 1);
+    localStorage.setItem('Contacts', JSON.stringify(ContactsArray));
     CloseContactWindow();
     ReloadContactList(ContactsArray);
 }
@@ -90,7 +91,6 @@ function SaveContact() {
 
         if(inputName.value != '' && numberId0.value != '' && emailId0.value != '')
         {
-
 
     if (createNewContact) {
         ContactsArray.push(Contact);
@@ -177,8 +177,7 @@ function ReloadContactList(currentArray) {
     while (contactList.firstChild){
         contactList.removeChild(contactList.firstChild);
     }
-
-    currentArray.sort(function(x,y){
+    currentArray.sort(function (x, y) {
         if (x.name > y.name)
             return 1;
         if (x.name < y.name)
@@ -191,14 +190,13 @@ function ReloadContactList(currentArray) {
         for (i = 0; i < currentArray.length; i++) {
             ContactListDraw(currentArray[i]);
         }
-    }else {
-        for (i = 0; i < ContactsArray.length; i++){
+    } else {
+        for (i = 0; i < ContactsArray.length; i++) {
             ContactsArray[i].id = i;
 
             ContactListDraw(currentArray[i]);
         }
     }
-
 }
 //Рисуем форму добавления и редактирования контакта
 function AddContactDrow() {
