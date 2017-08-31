@@ -18,7 +18,7 @@ inputSearch.oninput = function () {
 
     for (i = 0; i < ContactsArray.length; i++)
     {
-        if (ContactsArray[i].name.toLowerCase().indexOf(inputSearch.value) ==  0 )
+        if (ContactsArray[i].name.toLowerCase().indexOf(inputSearch.value.toLowerCase()) ==  0 )
         {
             SearchArray.push(ContactsArray[i]);
         }
