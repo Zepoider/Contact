@@ -130,11 +130,11 @@ function SaveInputValue() {
     Contact.name = inputName.value;
     for(z = 0; z < Contact.number.length; z++){
         let numberId = document.getElementById('number'+z);
-        Contact.number[z] = numberId.value;
+        if (numberId != null)Contact.number[z] = numberId.value;
     }
     for(y = 0; y < Contact.email.length; y++){
         let emailId = document.getElementById('email'+y);
-        Contact.email[y] = emailId.value;
+        if (emailId != null)Contact.email[y] = emailId.value;
     }
 }
 //Логика переключения между списком контактов и формой добавления/редактирования контакта
@@ -162,6 +162,7 @@ function CloseContactWindow() {
     ReloadContactList(ContactsArray);
 }
 function ResetAddContactWindow() {
+    SaveInputValue();
     let inputClean = document.getElementsByTagName('input');
     for (i = 0; i < inputClean.length; i++){
         inputClean[i].value = '';
@@ -352,10 +353,11 @@ function RemoveNumber(element) {
         let removeElement = removeElementParent.parentElement;
         removeElement.removeChild(removeElementParent);
         Contact.number.splice(element.id, 1);
+        ResetAddContactWindow();
+        OpenContactWindow(Contact);
     }
 }
 function AddNumber() {
-    SaveInputValue();
     Contact.number[Contact.number.length] = '';
     ResetAddContactWindow();
     OpenContactWindow(Contact);
@@ -369,7 +371,6 @@ function RemoveMail(element) {
     }
 }
 function AddMail() {
-    SaveInputValue();
     Contact.email[Contact.email.length] = '';
     ResetAddContactWindow();
     OpenContactWindow(Contact);
