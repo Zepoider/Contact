@@ -96,12 +96,14 @@ function SaveContact() {
                 if (Contact.number[i] == '')
                 {
                     Contact.number.splice(i, 1);
+                    i--;
                 }
             }
             for (i = 0; i < Contact.email.length; i++){
                 if (Contact.email[i] == '')
                 {
                     Contact.email.splice(i, 1);
+                    i--;
                 }
             }
     if (createNewContact) {
@@ -157,7 +159,6 @@ function CloseContactWindow() {
     document.getElementById('add-contact').style.display = 'none';
     ContactsArray = JSON.parse(localStorage.getItem('Contacts'));
 
-
     ResetAddContactWindow();
     ReloadContactList(ContactsArray);
 }
@@ -193,7 +194,6 @@ function ReloadContactList(currentArray) {
     } else {
         for (i = 0; i < ContactsArray.length; i++) {
             ContactsArray[i].id = i;
-
             ContactListDraw(currentArray[i]);
         }
     }
