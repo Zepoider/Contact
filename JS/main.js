@@ -92,6 +92,18 @@ function SaveContact() {
         if(inputName.value != '' && numberId0.value != '' && emailId0.value != '')
         {
 
+            for (i = 0; i < Contact.number.length; i++){
+                if (Contact.number[i] == '')
+                {
+                    Contact.number.splice(i, 1);
+                }
+            }
+            for (i = 0; i < Contact.email.length; i++){
+                if (Contact.email[i] == '')
+                {
+                    Contact.email.splice(i, 1);
+                }
+            }
     if (createNewContact) {
         ContactsArray.push(Contact);
     }
@@ -129,7 +141,6 @@ function SaveInputValue() {
 function OpenContactWindow(contact) {
 
     Contact = contact;
-
     document.getElementById('contact-list').style.display = 'none';
     document.getElementById('header').style.display = 'none';
     document.getElementById('add-contact').style.display = 'flex';
@@ -146,19 +157,8 @@ function CloseContactWindow() {
     document.getElementById('add-contact').style.display = 'none';
     ContactsArray = JSON.parse(localStorage.getItem('Contacts'));
 
+
     ResetAddContactWindow();
-    for (i = 0; i < Contact.number.length; i++){
-        if (Contact.number[i] == '')
-        {
-            Contact.number.splice(i, 1);
-        }
-    }
-    for (i = 0; i < Contact.email.length; i++){
-        if (Contact.email[i] == '')
-        {
-            Contact.email.splice(i, 1);
-        }
-    }
     ReloadContactList(ContactsArray);
 }
 function ResetAddContactWindow() {
@@ -184,7 +184,6 @@ function ReloadContactList(currentArray) {
             return -1;
         return 0;
     });
-
 
     if (currentArray != ContactsArray) {
         for (i = 0; i < currentArray.length; i++) {
@@ -360,7 +359,6 @@ function AddNumber() {
     Contact.number[Contact.number.length] = '';
     ResetAddContactWindow();
     OpenContactWindow(Contact);
-
 }
 function RemoveMail(element) {
     if (element.id != 0) {
