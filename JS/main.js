@@ -393,15 +393,15 @@ for (element in contact){
     if (element == 'name') CreateName(contactdataDiv, contact);
     if (element == 'number')
     {
-        for (let j = 0; j < contact.number.length; j++) {
-            CreateNumber(contactdataDiv, contact.number[j]);
-        }
+       // for (let j = 0; j < contact.number.length; j++) {
+            CreateNumber(contactdataDiv, contact.number[0]);
+      //  }
     }
     if (element == 'email')
     {
-        for (let k = 0; k < contact.email.length; k++) {
-            CreateEmail(contactdataDiv, contact.email[k]);
-        }
+      //  for (let k = 0; k < contact.email.length; k++) {
+            CreateEmail(contactdataDiv, contact.email[0]);
+    //    }
     }
 }
 
