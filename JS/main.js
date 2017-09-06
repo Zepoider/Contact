@@ -16,7 +16,7 @@ inputSearch.oninput = function () {
         inputSearch.value = inputSearch.value.substr(0, inputSearch.value.length - 1);
     }
 
-    for (i = 0; i < ContactsArray.length; i++)
+    for (let i = 0; i < ContactsArray.length; i++)
     {
         if (ContactsArray[i].name.toLowerCase().indexOf(inputSearch.value.toLowerCase()) ==  0 )
         {
@@ -72,7 +72,7 @@ function RemoveContact() {
     ReloadContactList(ContactsArray);
 }
 function EditContact(id) {
-    for (i = 0; i < ContactsArray.length; i++){
+    for (let i = 0; i < ContactsArray.length; i++){
         if (ContactsArray[i].id == id){
             Contact = ContactsArray[i];
             createNewContact = false;
@@ -92,14 +92,14 @@ function SaveContact() {
         if(inputName.value != '' && numberId0.value != '' && emailId0.value != '')
         {
 
-            for (i = 0; i < Contact.number.length; i++){
+            for (let i = 0; i < Contact.number.length; i++){
                 if (Contact.number[i] == '')
                 {
                     Contact.number.splice(i, 1);
                     i--;
                 }
             }
-            for (i = 0; i < Contact.email.length; i++){
+            for (let i = 0; i < Contact.email.length; i++){
                 if (Contact.email[i] == '')
                 {
                     Contact.email.splice(i, 1);
@@ -130,11 +130,11 @@ function SaveContact() {
 function SaveInputValue() {
     let inputName = document.getElementById('name');
     Contact.name = inputName.value;
-    for(z = 0; z < Contact.number.length; z++){
+    for(let z = 0; z < Contact.number.length; z++){
         let numberId = document.getElementById('number'+z);
         if (numberId != null)Contact.number[z] = numberId.value;
     }
-    for(y = 0; y < Contact.email.length; y++){
+    for(let y = 0; y < Contact.email.length; y++){
         let emailId = document.getElementById('email'+y);
         if (emailId != null)Contact.email[y] = emailId.value;
     }
@@ -165,7 +165,7 @@ function CloseContactWindow() {
 function ResetAddContactWindow() {
     SaveInputValue();
     let inputClean = document.getElementsByTagName('input');
-    for (i = 0; i < inputClean.length; i++){
+    for (let i = 0; i < inputClean.length; i++){
         inputClean[i].value = '';
     }
 
@@ -188,11 +188,11 @@ function ReloadContactList(currentArray) {
     });
 
     if (currentArray != ContactsArray) {
-        for (i = 0; i < currentArray.length; i++) {
+        for (let i = 0; i < currentArray.length; i++) {
             ContactListDraw(currentArray[i]);
         }
     } else {
-        for (i = 0; i < ContactsArray.length; i++) {
+        for (let i = 0; i < ContactsArray.length; i++) {
             ContactsArray[i].id = i;
             ContactListDraw(currentArray[i]);
         }
@@ -243,7 +243,7 @@ function AddContactDrow() {
             }
         }
         if (element == 'number') {
-            for (l = 0; l < Contact.number.length; l++) {
+            for (let l = 0; l < Contact.number.length; l++) {
                 let phoneDiv = document.createElement('div');
                 phoneDiv.setAttribute('class', 'search plus-minus-fields');
                 phoneDiv.setAttribute('id', 'phone-number-div');
@@ -259,12 +259,7 @@ function AddContactDrow() {
                 phoneDiv.appendChild(phoneDivEmpty);
 
                 let phoneSpan = document.createElement('span');
-                if (l == 0){
-                    phoneSpan.innerText = 'Phone Number';
-                }else {
-                    phoneSpan.innerText = 'More Phone Number';
-                }
-
+                phoneSpan.innerText = 'Phone Number';
                 phoneDivEmpty.appendChild(phoneSpan);
                 let phoneInput = document.createElement('input');
                 phoneInput.setAttribute('type', 'text');
@@ -287,7 +282,7 @@ function AddContactDrow() {
             }
         }
         if (element == 'email') {
-            for (h = 0; h < Contact.email.length; h++) {
+            for (let h = 0; h < Contact.email.length; h++) {
                 let emailDiv = document.createElement('div');
                 emailDiv.setAttribute('class', 'search plus-minus-fields');
                 emailDiv.setAttribute('id', 'email-div');
@@ -303,11 +298,7 @@ function AddContactDrow() {
                 emailDiv.appendChild(emailDivEmpty);
 
                 let emailSpan = document.createElement('span');
-                if (h == 0){
-                    emailSpan.innerText = 'E-mail Address';
-                }else {
-                    emailSpan.innerText = 'More E-mail Address';
-                }
+                emailSpan.innerText = 'E-mail Address';
 
                 emailDivEmpty.appendChild(emailSpan);
                 let emailInput = document.createElement('input');
@@ -402,13 +393,13 @@ for (element in contact){
     if (element == 'name') CreateName(contactdataDiv, contact);
     if (element == 'number')
     {
-        for (j = 0; j < contact.number.length; j++) {
+        for (let j = 0; j < contact.number.length; j++) {
             CreateNumber(contactdataDiv, contact.number[j]);
         }
     }
     if (element == 'email')
     {
-        for (k = 0; k < contact.email.length; k++) {
+        for (let k = 0; k < contact.email.length; k++) {
             CreateEmail(contactdataDiv, contact.email[k]);
         }
     }
