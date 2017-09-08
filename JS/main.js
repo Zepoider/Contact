@@ -4,7 +4,9 @@ let Contact;
 let createNewContact = true;
 let SearchArray = [];
 //Блок событий при отображении списка контактов
-document.getElementById('add-contact-button').addEventListener('click', AddNewContact, false);
+$('#add-contact-button').click(function () {
+    AddNewContact();
+});
 let inputSearch = document.getElementById('inputsearch');
 inputSearch.oninput = function () {
 
@@ -25,28 +27,7 @@ inputSearch.oninput = function () {
     }
     ReloadContactList(SearchArray);
 }
-document.getElementById('contact-list').onclick = function (event){
-    let target = event.target || event.srcElement
-    if (target.id != 'contact-list') {
-        if (target.id != '')EditContact(target.id);
-    }
-    }
-document.getElementById('add-contact').onclick = function (event){
-    let target = event.target || event.srcElement
 
-    if (target.className == 'button-plus-phone'){
-        AddNumber();
-    }
-    if (target.className == 'button-minus-phone'){
-        RemoveNumber(target);
-    }
-    if (target.className == 'button-plus-email'){
-        AddMail();
-    }
-    if (target.className == 'button-minus-email'){
-        RemoveMail(target);
-    }
-}
 //Подтягивание базы контактов при первом запуске/релоаде
     if (localStorage.getItem('Contacts'))
     {
@@ -62,7 +43,6 @@ function AddNewContact() {
         number: [''],
         email: ['']
     }
-
     OpenContactWindow(newContact);
 }
 function RemoveContact() {
@@ -128,35 +108,29 @@ function SaveContact() {
 }
 }
 function SaveInputValue() {
-    let inputName = document.getElementById('name');
-    Contact.name = inputName.value;
+    Contact.name = $('#name').val();
     for(let z = 0; z < Contact.number.length; z++){
-        let numberId = document.getElementById('number'+z);
-        if (numberId != null)Contact.number[z] = numberId.value;
+        Contact.number[z] = $('#number' + z).val();
     }
     for(let y = 0; y < Contact.email.length; y++){
-        let emailId = document.getElementById('email'+y);
-        if (emailId != null)Contact.email[y] = emailId.value;
+        Contact.email[y] = $('#email' + y).val();
     }
 }
 //Логика переключения между списком контактов и формой добавления/редактирования контакта
 function OpenContactWindow(contact) {
 
     Contact = contact;
-    document.getElementById('contact-list').style.display = 'none';
-    document.getElementById('header').style.display = 'none';
-    document.getElementById('add-contact').style.display = 'flex';
-    AddContactDrow();
+$('#contact-list, #header').hide();
+$ ('#add-contact').css('display', 'flex');
 
-    document.getElementById('save-contact').addEventListener('click', SaveContact, false);
-    document.getElementById('reset-change').addEventListener('click', CloseContactWindow, false);
-    if (!createNewContact) document.getElementById('removecontact').addEventListener('click', RemoveContact, false);
+    AddContactDrow();
 
 }
 function CloseContactWindow() {
-    document.getElementById('contact-list').style.display = 'flex';
-    document.getElementById('header').style.display = 'flex';
-    document.getElementById('add-contact').style.display = 'none';
+
+    $('#contact-list, #header').css('display', 'flex');
+    $('#add-contact').hide();
+
     ContactsArray = JSON.parse(localStorage.getItem('Contacts'));
 
     ResetAddContactWindow();
@@ -164,15 +138,12 @@ function CloseContactWindow() {
 }
 function ResetAddContactWindow() {
     SaveInputValue();
-    let inputClean = document.getElementsByTagName('input');
-    for (let i = 0; i < inputClean.length; i++){
-        inputClean[i].value = '';
-    }
+    $('input').each(function () {
+        $(this).val('');
+    });
 
-    let addContact = document.getElementById('add-contact');
-    while (addContact.firstChild){
-        addContact.removeChild(addContact.firstChild);
-    }
+    $('#add-contact').empty();
+
 }
 function ReloadContactList(currentArray) {
     let contactList = document.getElementById('contact-list');
@@ -201,165 +172,166 @@ function ReloadContactList(currentArray) {
 //Отрисовка формы добавления и редактирования контакта
 function AddContactDrow() {
 
-    let contactForm = document.getElementById('add-contact');
+    $('#add-contact').append($('<div/>', {
+        class: 'text',
+        id: 'headerdiv'+Contact.id
+    }));
 
-    let headerDiv = document.createElement('div');
-    headerDiv.setAttribute('class', 'text');
-    contactForm.appendChild(headerDiv);
-    let headerH = document.createElement('h2');
     if (createNewContact) {
-        headerH.innerText = 'Add Contact';
+        $('<h2/>', {
+            text: 'Add Contact'
+        }).appendTo('#headerdiv' +Contact.id);
     }else {
-        headerH.innerText = 'Edit Contact';
-        let removeContact = document.createElement('div');
-        removeContact.setAttribute('id', 'removecontact');
-        removeContact.innerText = 'Remove Contact';
-        contactForm.appendChild(removeContact);
+        $('<h2/>', {
+            text: 'Edit Contact',
+        }).appendTo('#headerdiv' +Contact.id),
+            $('<div/>', {
+            id: 'removecontact',
+            text: 'Remove Contact',
+                on: {
+                click: function ()
+                {
+                    RemoveContact();
+                }
+                    }
+        }).appendTo('#add-contact');
     }
-    headerDiv.appendChild(headerH);
-
 
     for (element in Contact) {
         if (element == 'name') {
-            let nameDiv = document.createElement('div');
-            nameDiv.setAttribute('class', 'search');
-            contactForm.appendChild(nameDiv);
 
-            let nameSpan = document.createElement('span');
-            nameSpan.innerText = 'Name';
-            nameDiv.appendChild(nameSpan);
-            let nameInput = document.createElement('input');
-            nameInput.setAttribute('type', 'text');
-            nameInput.setAttribute('id', 'name');
-            nameDiv.appendChild(nameInput);
-            nameInput.value = Contact.name;
-            nameInput.oninput = function ()
-            {
-                let matchValue = /^[a-zA-Z\s]*$/;
-                if (!nameInput.value.match(matchValue) || nameInput.value.length > 22)
-                {
-                    nameInput.value = nameInput.value.substr(0, nameInput.value.length - 1);
+            $('<div/>', {
+                class: 'search'
+            }).appendTo('#add-contact').append($('<span/>', {
+                text: 'Name'
+            }), $('<input/>', {
+                id: 'name',
+                val: Contact.name,
+                on: {
+                    input: function () {
+                        let matchValue = /^[a-zA-Z\s]*$/;
+                        if (!this.value.match(matchValue) || this.value.length > 22)
+                        {
+                            this.value = this.value.substr(0, this.value.length - 1);
+                        }
+                    }
                 }
-            }
+            }));
         }
         if (element == 'number') {
             for (let l = 0; l < Contact.number.length; l++) {
-                let phoneDiv = document.createElement('div');
-                phoneDiv.setAttribute('class', 'search plus-minus-fields');
-                phoneDiv.setAttribute('id', 'phone-number-div');
-                contactForm.appendChild(phoneDiv);
 
-                let minusDiv = document.createElement('div');
-                minusDiv.setAttribute('class', 'button-minus-phone');
-                minusDiv.innerText = '-';
-                minusDiv.setAttribute('id', l);
-                phoneDiv.appendChild(minusDiv);
-
-                let phoneDivEmpty = document.createElement('div');
-                phoneDiv.appendChild(phoneDivEmpty);
-
-                let phoneSpan = document.createElement('span');
-                phoneSpan.innerText = 'Phone Number';
-                phoneDivEmpty.appendChild(phoneSpan);
-                let phoneInput = document.createElement('input');
-                phoneInput.setAttribute('type', 'text');
-                phoneInput.setAttribute('id', 'number'+l);
-                phoneDivEmpty.appendChild(phoneInput);
-                phoneInput.oninput = function ()
-                {
-                    if (isNaN(phoneInput.value+1) || phoneInput.value.length > 10)
-                    {
-                        phoneInput.value = phoneInput.value.substr(0, phoneInput.value.length - 1);
+                $('<div/>', {
+                  class: 'search plus-minus-fields',
+                    id: 'phone-number-div'
+                }).append($('<div/>', {
+                    class: 'button-minus-phone',
+                    id: l,
+                    text: '-',
+                    on: {
+                        click: function () {
+                            if (this.id != 0) {
+                                $(this).parent().remove();
+                                Contact.number.splice(l, 1);
+                            }
+                        }
+                }}), $('<div/>').append(($('<span/>', {
+                    text: 'Phone Number'
+                })), $('<input/>', {
+                    id: 'number' + l,
+                    on: {
+                        input: function ()
+                        {
+                            if (isNaN(this.value+1) || this.value.length > 10)
+                            {
+                                this.value = this.value.substr(0, this.value.length - 1);
+                            }
+                        }
+                    },
+                    val: Contact.number[l]
+                })), $('<div/>', {
+                    class: 'button-plus-phone',
+                    text: '+',
+                    on: {
+                        click: function () {
+                            AddNumber();
+                        }
                     }
-                }
-
-                let plusDiv = document.createElement('div');
-                plusDiv.setAttribute('class', 'button-plus-phone');
-                plusDiv.innerText = '+';
-                phoneDiv.appendChild(plusDiv);
-
-                phoneInput.value = Contact.number[l];
+                })).appendTo('#add-contact');
             }
         }
         if (element == 'email') {
             for (let h = 0; h < Contact.email.length; h++) {
-                let emailDiv = document.createElement('div');
-                emailDiv.setAttribute('class', 'search plus-minus-fields');
-                emailDiv.setAttribute('id', 'email-div');
-                contactForm.appendChild(emailDiv);
 
-                let minusDiv = document.createElement('div');
-                minusDiv.setAttribute('class', 'button-minus-email');
-                minusDiv.innerText = '-';
-                minusDiv.setAttribute('id', h);
-                emailDiv.appendChild(minusDiv);
-
-                let emailDivEmpty = document.createElement('div');
-                emailDiv.appendChild(emailDivEmpty);
-
-                let emailSpan = document.createElement('span');
-                emailSpan.innerText = 'E-mail Address';
-
-                emailDivEmpty.appendChild(emailSpan);
-                let emailInput = document.createElement('input');
-                emailInput.setAttribute('type', 'text');
-                emailInput.setAttribute('id', 'email'+h);
-                emailDivEmpty.appendChild(emailInput);
-                emailInput.oninput = function ()
-                {
-                    let matchValue = /^[a-z0-9@._]*$/;
-                    if (!emailInput.value.match(matchValue) || emailInput.value.length > 25)
-                    {
-                        emailInput.value = emailInput.value.substr(0, emailInput.value.length - 1);
+                $('<div/>', {
+                    class: 'search plus-minus-fields',
+                    id: 'email-div'
+                }).append($('<div/>', {
+                    class: 'button-minus-email',
+                    id: h,
+                    text: '-',
+                    on: {
+                        click: function () {
+                            if (this.id != 0) {
+                                $(this).parent().remove();
+                                Contact.email.splice(h, 1);
+                            }
+                        }
                     }
-                }
-
-                let plusDiv = document.createElement('div');
-                plusDiv.setAttribute('class', 'button-plus-email');
-                plusDiv.innerText = '+';
-                emailDiv.appendChild(plusDiv);
-
-                emailInput.value = Contact.email[h];
+                }), $('<div/>').append(($('<span/>', {
+                    text: 'E-mail Address'
+                })), $('<input/>', {
+                    id: 'email' + h,
+                    on: {
+                        input: function ()
+                        {
+                            let matchValue = /^[a-z0-9@._]*$/;
+                            if (!this.value.match(matchValue) || this.value.length > 25)
+                            {
+                                this.value = this.value.substr(0, this.value.length - 1);
+                            }
+                        }
+                    },
+                    val: Contact.email[h]
+                })), $('<div/>', {
+                    class: 'button-plus-email',
+                    text: '+',
+                    on: {
+                        click: function () {
+                            AddMail();
+                        }
+                    }
+                })).appendTo('#add-contact');
             }
         }
     }
 
-    let buttonDiv = document.createElement('div');
-    buttonDiv.setAttribute('class', 'search buttons');
-    contactForm.appendChild(buttonDiv);
+    $('<div/>', {
+        class: 'search buttons'
+    }).append($('<div/>', {
+        id: 'save-contact',
+        text: 'Ok',
+        on: {
+            click: function () {
+                SaveContact();
+            }
+        }
+    }), $('<div/>', {
+        id: 'reset-change',
+        text: 'Cancel',
+        on: {
+            click: function () {
+                CloseContactWindow();
+            }
+        }
+    })).appendTo('#add-contact');
 
-    let buttonOkDiv = document.createElement('div');
-    buttonOkDiv.setAttribute('id', 'save-contact');
-    buttonOkDiv.innerText = 'Ok';
-    buttonDiv.appendChild(buttonOkDiv);
 
-    let buttonCancelDiv = document.createElement('div');
-    buttonCancelDiv.setAttribute('id', 'reset-change');
-    buttonCancelDiv.innerText = 'Cancel';
-    buttonDiv.appendChild(buttonCancelDiv);
-}
-function RemoveNumber(element) {
-    if (element.id != 0){
-        let removeElementParent = element.parentElement;
-        let removeElement = removeElementParent.parentElement;
-        removeElement.removeChild(removeElementParent);
-        Contact.number.splice(element.id, 1);
-        ResetAddContactWindow();
-        OpenContactWindow(Contact);
-    }
 }
 function AddNumber() {
     Contact.number[Contact.number.length] = '';
     ResetAddContactWindow();
     OpenContactWindow(Contact);
-}
-function RemoveMail(element) {
-    if (element.id != 0) {
-        let removeElementParent = element.parentElement;
-        let removeElement = removeElementParent.parentElement;
-        removeElement.removeChild(removeElementParent);
-        Contact.email.splice(element.id, 1);
-    }
 }
 function AddMail() {
     Contact.email[Contact.email.length] = '';
@@ -369,58 +341,31 @@ function AddMail() {
 //Отрисовка списка контактов
 function ContactListDraw(contact) {
 
-    let contactList = document.getElementById('contact-list');
-
-    let listDiv = document.createElement("div");
-    listDiv.setAttribute('class', 'list');
-    contactList.appendChild(listDiv);
-
-    let logoDiv = document.createElement("div");
-    logoDiv.setAttribute('class', 'logo');
-    logoDiv.setAttribute('id', contact.id);
-    listDiv.appendChild(logoDiv);
-    let logoSpan = document.createElement('span');
-    logoSpan.setAttribute('class', 'logospan');
-    logoSpan.setAttribute('id', contact.id);
-    logoDiv.appendChild(logoSpan);
-    logoSpan.innerText ='Z';
-
-    let contactdataDiv = document.createElement("div");
-    contactdataDiv.setAttribute('class', 'contactdata');
-    listDiv.appendChild(contactdataDiv);
-
-for (element in contact){
-    if (element == 'name') CreateName(contactdataDiv, contact);
-    if (element == 'number')
-    {
-       // for (let j = 0; j < contact.number.length; j++) {
-            CreateNumber(contactdataDiv, contact.number[0]);
-      //  }
-    }
-    if (element == 'email')
-    {
-      //  for (let k = 0; k < contact.email.length; k++) {
-            CreateEmail(contactdataDiv, contact.email[0]);
-    //    }
-    }
-}
-
-}
-function CreateName(Div, contact) {
-    let nameDiv = document.createElement("div");
-    nameDiv.setAttribute('class', 'name');
-    Div.appendChild(nameDiv);
-    nameDiv.innerText = contact.name;
-}
-function CreateNumber(Div, contact) {
-    let phoneDiv = document.createElement("div");
-    phoneDiv.setAttribute('class', 'phone');
-    Div.appendChild(phoneDiv);
-    phoneDiv.innerText = contact;
-}
-function CreateEmail(Div,contact) {
-    let emailDiv = document.createElement("div");
-    emailDiv.setAttribute('class', 'email');
-    Div.appendChild(emailDiv);
-    emailDiv.innerText = contact;
+    $('#contact-list').append($('<div/>', {
+        class: 'list',
+    }).append($('<div/>', {
+        class: 'logo',
+        id: 'logo' + contact.id,
+        on: {
+            click: function () {
+                EditContact(contact.id);
+            }
+        }
+    }).append($('<span/>', {
+        class: 'logospan',
+        id: contact.id,
+        text: 'Z'
+    })), $('<div/>', {
+        class: 'contactdata'
+    }).append($('<div/>', {
+        class: 'name',
+        text: contact.name
+    }), $('<div/>', {
+        class: 'phone',
+        text: contact.number[0]
+    }), $('<div/>', {
+        class: 'email',
+        text: contact.email[0]
+        })
+    )));
 }
