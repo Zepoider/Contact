@@ -146,17 +146,17 @@ function ResetAddContactWindow() {
 
 }
 function ReloadContactList(currentArray) {
-    let contactList = document.getElementById('contact-list');
-    while (contactList.firstChild){
-        contactList.removeChild(contactList.firstChild);
-    }
-    currentArray.sort(function (x, y) {
+
+    $('#contact-list').empty();
+
+    if (currentArray.length > 0){
+        currentArray.sort(function (x, y) {
         if (x.name > y.name)
             return 1;
         if (x.name < y.name)
             return -1;
         return 0;
-    });
+    })};
 
     if (currentArray != ContactsArray) {
         for (let i = 0; i < currentArray.length; i++) {
