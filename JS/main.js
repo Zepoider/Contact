@@ -179,6 +179,7 @@ function ReloadContactList(currentArray) {
     while (contactList.firstChild){
         contactList.removeChild(contactList.firstChild);
     }
+	if (currentArray != null){
     currentArray.sort(function (x, y) {
         if (x.name > y.name)
             return 1;
@@ -186,7 +187,7 @@ function ReloadContactList(currentArray) {
             return -1;
         return 0;
     });
-
+	}
     if (currentArray != ContactsArray) {
         for (let i = 0; i < currentArray.length; i++) {
             ContactListDraw(currentArray[i]);
