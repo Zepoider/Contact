@@ -149,7 +149,7 @@ function ReloadContactList(currentArray) {
 
     $('#contact-list').empty();
 
-    if (currentArray.length > 0){
+    if (currentArray != null){
         currentArray.sort(function (x, y) {
         if (x.name > y.name)
             return 1;
