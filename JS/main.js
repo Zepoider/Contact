@@ -91,15 +91,7 @@ function SaveContact() {
 
         if(inputName.value != '' && numberId0.value != '' && emailId0.value != '')
         {
-			for (let i = 0; i < Contact.email.length; i++){
-                if (!document.getElementById('email' +i).value.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/))
-                {
-                    document.getElementById('email' +i).style.color = '#FF0C0E';
-                    return;
-                }
-            }
-
-            for (let i = 0; i < Contact.number.length; i++){
+			for (let i = 0; i < Contact.number.length; i++){
                 if (Contact.number[i] == '')
                 {
                     Contact.number.splice(i, 1);
@@ -118,6 +110,13 @@ function SaveContact() {
     }
 
     ReloadContactList(ContactsArray)
+	for (let i = 0; i < Contact.email.length; i++){
+                if (!document.getElementById('email' +i).value.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/))
+                {
+                    document.getElementById('email' +i).style.color = '#FF0C0E';
+                    return;
+                }
+            }
     localStorage.setItem('Contacts', JSON.stringify(ContactsArray));
 
     CloseContactWindow();
