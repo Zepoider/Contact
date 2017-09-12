@@ -105,18 +105,20 @@ function SaveContact() {
                     i--;
                 }
             }
-    if (createNewContact) {
-        ContactsArray.push(Contact);
-    }
-
-    ReloadContactList(ContactsArray)
-	for (let i = 0; i < Contact.email.length; i++){
+			
+			for (let i = 0; i < Contact.email.length; i++){
                 if (!document.getElementById('email' +i).value.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/))
                 {
                     document.getElementById('email' +i).style.color = '#FF0C0E';
                     return;
                 }
             }
+    if (createNewContact) {
+        ContactsArray.push(Contact);
+    }
+
+    ReloadContactList(ContactsArray)
+	
     localStorage.setItem('Contacts', JSON.stringify(ContactsArray));
 
     CloseContactWindow();
